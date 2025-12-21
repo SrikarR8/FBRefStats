@@ -10,7 +10,7 @@ import random
 
 def printDataByYear(start, end,inputUrl,LeagueName):
     url = ""
-    headers = {}
+    headers = {""}
     start_year = start
     end_year = end
     players = []
@@ -24,7 +24,20 @@ def printDataByYear(start, end,inputUrl,LeagueName):
         soup = BeautifulSoup(response.content, "html.parser")
         mydivs = soup.find_all("div", {"class": "box"})
 
+        
+
         for div in mydivs:
+
+            header = div.find("h2", {"class": "content-box-headline"})
+
+            if not header:
+                continue
+
+            Club1 = header.text.strip()
+            links = header.find_all('a')
+            if links:
+                Club1 = links[-1].text.strip()
+
             table = (div.find_all('table'))
 
             for t in table:
@@ -40,7 +53,7 @@ def printDataByYear(start, end,inputUrl,LeagueName):
 
                 for tr in tb.find_all('tr'):
 
-                    trFrom = "Unknown"
+                    Club2 = "Unknown"
                     trVal = "0"
                     trFee = "0"
                     
@@ -48,7 +61,7 @@ def printDataByYear(start, end,inputUrl,LeagueName):
                     tdClub = tr.find_all('td', {"class": "no-border-links verein-flagge-transfer-cell"})
                     
                     if(len(tdClub) > 0):
-                        trFrom = (tdClub[0].text)
+                        Club2 = (tdClub[0].text)
                     if (len(td) > 0):
                         trVal = (td[0].text)
                         trFee = (td[1].text)
@@ -57,7 +70,7 @@ def printDataByYear(start, end,inputUrl,LeagueName):
                             if(td_cell.div):
                                 trDiv = (td_cell.div)
 
-                                row_string = f'"{trDiv.text.strip()}","{trVal.strip()}","{trFee.strip()}","{trFrom.strip()}","{direction}"'
+                                row_string = f'"{trDiv.text.strip()}","{trVal.strip()}","{trFee.strip()}","{Club1.strip()}","{direction}","{Club2.strip()}"'
                                 players.append(row_string)
 
         time.sleep(random.uniform(2, 5)) 
