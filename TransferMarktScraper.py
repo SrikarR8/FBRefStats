@@ -20,7 +20,7 @@ def enterData(start, end):
     for year in range(start_year, end_year):
 
         print(f"Scraping year: {year}") 
-        #Make request
+        #Make request for Premier League Transfers
         url = f"https://www.transfermarkt.us/premier-league/transfers/wettbewerb/GB1/plus/?saison_id={year}&s_w=&leihe=1&intern=0&intern=1"
         response = requests.get(url, headers=headers)
         soup = BeautifulSoup(response.content, "html.parser")
