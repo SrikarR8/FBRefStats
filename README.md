@@ -34,9 +34,12 @@ This repository contains data from **FbRef** and **Transfermarkt** regarding var
 
 > Code can be found in "TransfermarktScraper.py" 
 
-   - Transfer Data 
+   - Transfer Data
+
+     > "Kurt Zouma","€15.00m","End of loanMay 31, 2018","Chelsea FC","Left","Stoke City" => Joined Stoke City, Left Chelsea
+     
+     > "Diego Costa","€50.00m","€60.00m","Chelsea FC","Joined","Atlético" => Joined Chelsea FC, left Atlético
    - Market Valuations (Present and Historic)
 
 ## Future Work
-   -  Making 'From' and 'To' clubs for transfer more obvious
    -  Adding game lineups for each game
