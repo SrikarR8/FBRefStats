@@ -36,3 +36,7 @@ This repository contains data from **FbRef** and **Transfermarkt** regarding var
 
    - Transfer Data 
    - Market Valuations (Present and Historic)
+
+## Future Work
+   -  Making 'From' and 'To' clubs for transfer more obvious
+   -  Adding game lineups for each game
