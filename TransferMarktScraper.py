@@ -3,32 +3,27 @@
 # **Usage:** I do not encourage or condone the mass scraping of Transfermarkt. Please respect their `robots.txt` and Terms of Service. (https://www.transfermarkt.us/intern/anb)
 # **Responsibility:** The author is not responsible for any misuse of this software or any bans incurred by the user. 
 # **Throttling:** This script includes built-in `time.sleep()` delays to avoid over-burdening the Transfermarkt servers.
-
 import requests
 from bs4 import BeautifulSoup
 import time
 import random
 
-def enterData(start, end):
+def printDataByYear(start, end,inputUrl,LeagueName):
     url = ""
-    #Use as necessary
-    headers = {} 
+    headers = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"}
     start_year = start
     end_year = end
     players = []
     
     for year in range(start_year, end_year):
 
-        print(f"Scraping year: {year}") 
-        #Make request for Premier League Transfers
-        url = f"https://www.transfermarkt.us/premier-league/transfers/wettbewerb/GB1/plus/?saison_id={year}&s_w=&leihe=1&intern=0&intern=1"
+        print(f"Scraping year: {year} for {LeagueName}") 
+        
+        url = f"{inputUrl}{year}"
         response = requests.get(url, headers=headers)
         soup = BeautifulSoup(response.content, "html.parser")
-
-        #Code for scraping
-        #Club: show which club has bought or sold (to be used with direction): trFrom
-        #Direction: has value of either "Left" or "Joined", used in conjunction with Club
         mydivs = soup.find_all("div", {"class": "box"})
+
         for div in mydivs:
             table = (div.find_all('table'))
 
@@ -69,17 +64,31 @@ def enterData(start, end):
 
     return players
 
+def enterDataByLeague(startYr,endYr,URL,LeagueName):
 
-#Use start year of starting season and end date of ending season
-#Example for 2017-18 to 2025-26
-playersArr = enterData(2017, 2026)
+    playersArr = printDataByYear(startYr, endYr,URL,LeagueName)
 
-file_name = 'data_output.csv'
+    file_name = f"{LeagueName}.csv"
+
+    with open(file_name, 'w', encoding='utf-8') as f:
+        f.write('Name,Value,Fee,From,Direction\n')
+        for player in playersArr:
+            f.write(player + '\n')
+
+    print(f"Successfully saved {len(playersArr)} rows to {file_name}")
 
 
-with open(file_name, 'w', encoding='utf-8') as f:
-    f.write('Name,Value,Fee,Club,Direction\n')
-    for player in playersArr:
-        f.write(player + '\n')
+engTransfers = "https://www.transfermarkt.us/premier-league/transfers/wettbewerb/GB1/plus/?saison_id="
+spnTransfers = "https://www.transfermarkt.us/laliga/transfers/wettbewerb/ES1/plus/?saison_id="
+itlTransfers = "https://www.transfermarkt.us/serie-a/transfers/wettbewerb/IT1/saison_id/"
+gerTransfers = "https://www.transfermarkt.us/bundesliga/transfers/wettbewerb/L1/plus/?saison_id="
+fraTransfers = "https://www.transfermarkt.us/ligue-1/transfers/wettbewerb/FR1/plus/?saison_id="
 
-print(f"Successfully saved {len(playersArr)} rows to {file_name}")
+# 2017-18 to 2025-26
+enterDataByLeague(2017,2026,engTransfers,"England")
+enterDataByLeague(2017,2026,spnTransfers,"Spain")
+enterDataByLeague(2017,2026,itlTransfers,"Italy")
+enterDataByLeague(2017,2026,gerTransfers,"Germany")
+enterDataByLeague(2017,2026,fraTransfers,"France")
+
+
